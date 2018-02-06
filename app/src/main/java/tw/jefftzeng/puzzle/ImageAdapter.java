@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import java.util.Random;
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     ArrayList<Bitmap> splitImages = new ArrayList<Bitmap>();
+    ArrayList<ImageView> imageViews = new ArrayList<ImageView>();
     int []serialArray;
 
     public ImageAdapter(Context c) {
@@ -37,10 +39,28 @@ public class ImageAdapter extends BaseAdapter {
             serialArray[b] = temp;
         }
 
+
+        Resources res = mContext.getResources();
+        Bitmap srcBmp = BitmapFactory.decodeResource(res, R.drawable.background);
+        int hScale = (int)(srcBmp.getWidth() / 3);
+        int vScale = (int)(srcBmp.getHeight() / 3);
+        for(int v =0; v <srcBmp.getHeight(); v+=vScale) {
+            for (int h = 0; h < srcBmp.getWidth(); h += hScale) {
+                Bitmap dstBmp = Bitmap.createBitmap(srcBmp, h, v, hScale, vScale);
+                splitImages.add(dstBmp);
+
+                ImageView imageView = new ImageView(mContext);
+                imageView.setLayoutParams(new GridView.LayoutParams(hScale, vScale));
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                imageView.setPadding(8, 8, 8, 8);
+                imageView.setImageBitmap(dstBmp);
+                imageViews.add(imageView);
+            }
+        }
     }
     @Override
     public int getCount() {
-        return splitImages.size();
+        return imageViews.size();
     }
 
     @Override
@@ -55,23 +75,7 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        ImageView imageView = null;
-        Resources res = mContext.getResources();
-        Bitmap bmp = BitmapFactory.decodeResource(res, R.drawable.background);
-        int hScale = (int)bmp.getWidth() / 3;
-        int vScale = (int)bmp.getHeight() / 3;
-        for(int v =0; v <bmp.getHeight(); v+=vScale)
-            for(int h =0; h <bmp.getWidth(); h+=hScale)
-                splitImages.add(Bitmap.createBitmap(bmp, h, v, hScale, vScale));
-        if(view == null) {
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(hScale, vScale));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
-        }else {
-            imageView = (ImageView)view;
-        }
-        imageView.setImageBitmap(splitImages.get(position));
-        return imageView;
+
+        return imageViews.get(position);
     }
 }

@@ -6,13 +6,14 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
-    GridView girdView =null;
+    GridView gridView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        girdView = (GridView)findViewById(R.id.gridView);
-        girdView.setAdapter(new ImageAdapter(this));
+        gridView = (GridView)findViewById(R.id.gridView);
+        gridView.setNumColumns(3);
+        gridView.setAdapter(new ImageAdapter(this));
 
     }
 }
