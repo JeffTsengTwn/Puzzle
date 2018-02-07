@@ -36,14 +36,20 @@ public class ImageAdapter extends BaseAdapter implements AdapterView.OnItemClick
     public ImageAdapter(Context c) {
         mContext = c;
         serialArray = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '*'};
-        char temp;
-        for(int index = 0; index < (int) (Math.random()*900) +100; index++) {
-            int a = (int)(Math.random()*9);
-            int b = (int)(Math.random()*9);
+        for(int times = 0; times < 20; times++) {
+           for(int index = 0; index < serialArray.length; index++) {
+               if(serialArray[index]=='*') {
+                   int [] direction = new int []{1,-1,3,-3};
+                   int num = (int)(Math.random()*4);
+                   char temp;
+                   if(index+direction[num] >=0 && index+direction[num] < serialArray.length) {
+                       temp = serialArray[index+direction[num]];
+                       serialArray[index+direction[num]] = serialArray[index];
+                       serialArray[index] = temp;
+                   }
 
-            temp = serialArray[a];
-            serialArray[a] = serialArray[b];
-            serialArray[b] = temp;
+               }
+           }
         }
 
         Resources res = mContext.getResources();
