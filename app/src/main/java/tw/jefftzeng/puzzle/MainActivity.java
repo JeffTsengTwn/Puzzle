@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
         gridView = (GridView)findViewById(R.id.gridView);
         gridView.setNumColumns(3);
-        //gridView.setVerticalSpacing(16);
         gridView.setHorizontalSpacing(0);
         gridView.setAdapter(new ImageAdapter(this));
 

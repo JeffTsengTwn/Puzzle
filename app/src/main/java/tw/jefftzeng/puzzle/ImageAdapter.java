@@ -29,21 +29,20 @@ public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     ArrayList<Bitmap> splitImages = new ArrayList<Bitmap>();
     ArrayList<ImageView> imageViews = new ArrayList<ImageView>();
-    int []serialArray;
+    char []serialArray;
 
     public ImageAdapter(Context c) {
         mContext = c;
-        serialArray = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
-        int temp = 0;
+        serialArray = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '*'};
+        char temp;
         for(int index = 0; index < (int) (Math.random()*900) +100; index++) {
-            int a = (int)Math.random()*9;
-            int b = (int)Math.random()*9;
+            int a = (int)(Math.random()*9);
+            int b = (int)(Math.random()*9);
 
             temp = serialArray[a];
             serialArray[a] = serialArray[b];
             serialArray[b] = temp;
         }
-
 
         Resources res = mContext.getResources();
         Display display = ((WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -61,15 +60,19 @@ public class ImageAdapter extends BaseAdapter {
             for (int h = 0; h < resizeBmp.getWidth(); h += hScale) {
                 Bitmap dstBmp = Bitmap.createBitmap(resizeBmp, h, v, hScale, vScale);
                 splitImages.add(dstBmp);
-
-                ImageView imageView = new ImageView(mContext);
-                imageView.setLayoutParams(new GridView.LayoutParams(hScale, vScale));
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setPadding(8, 8, 8, 8);
-                imageView.setImageBitmap(dstBmp);
-                imageViews.add(imageView);
             }
         }
+
+        for(int index=0; index < serialArray.length; index++){
+            ImageView imageView = new ImageView(mContext);
+            imageView.setLayoutParams(new GridView.LayoutParams(hScale, vScale));
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setPadding(8, 8, 8, 8);
+            if(serialArray[index] != '*')
+                imageView.setImageBitmap(splitImages.get(serialArray[index]-'0'));
+            imageViews.add(imageView);
+        }
+
     }
     @Override
     public int getCount() {
