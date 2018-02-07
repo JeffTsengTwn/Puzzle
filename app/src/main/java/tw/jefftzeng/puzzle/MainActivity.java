@@ -9,16 +9,18 @@ import android.widget.ImageView;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 public class MainActivity extends AppCompatActivity {
     GridView gridView;
+    ImageAdapter imageAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+        imageAdapter = new ImageAdapter(this);
         gridView = (GridView)findViewById(R.id.gridView);
         gridView.setNumColumns(3);
-        gridView.setHorizontalSpacing(0);
-        gridView.setAdapter(new ImageAdapter(this));
+        gridView.setAdapter(imageAdapter);
+        gridView.setOnItemClickListener(imageAdapter);
 
     }
 }

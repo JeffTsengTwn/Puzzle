@@ -11,10 +11,12 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -25,7 +27,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * Created by JeffTseng on 2018/2/5.
  */
 
-public class ImageAdapter extends BaseAdapter {
+public class ImageAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
     private Context mContext;
     ArrayList<Bitmap> splitImages = new ArrayList<Bitmap>();
     ArrayList<ImageView> imageViews = new ArrayList<ImageView>();
@@ -93,5 +95,50 @@ public class ImageAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
 
         return imageViews.get(position);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
+        if((position + 1) < serialArray.length && serialArray[position + 1] == '*') {
+            imageViews.get(position).setImageDrawable(null);
+            imageViews.get(position+1).setImageBitmap(splitImages.get(serialArray[position]-'0'));
+            char temp;
+            temp = serialArray[position];
+            serialArray[position] = serialArray[position+1];
+            serialArray[position+1] = temp;
+            this.notifyDataSetChanged();
+        }
+
+        if((position -1) >= 0 && serialArray[position - 1] == '*') {
+            imageViews.get(position).setImageDrawable(null);
+            imageViews.get(position-1).setImageBitmap(splitImages.get(serialArray[position]-'0'));
+            char temp;
+            temp = serialArray[position];
+            serialArray[position] = serialArray[position-1];
+            serialArray[position-1] = temp;
+            this.notifyDataSetChanged();
+        }
+
+        if((position +3) < serialArray.length && serialArray[position +3] == '*') {
+            imageViews.get(position).setImageDrawable(null);
+            imageViews.get(position+3).setImageBitmap(splitImages.get(serialArray[position]-'0'));
+            char temp;
+            temp = serialArray[position];
+            serialArray[position] = serialArray[position+3];
+            serialArray[position+3] = temp;
+            this.notifyDataSetChanged();
+        }
+
+        if((position -3) >= 0 && serialArray[position -3] == '*') {
+            imageViews.get(position).setImageDrawable(null);
+            imageViews.get(position-3).setImageBitmap(splitImages.get(serialArray[position]-'0'));
+            char temp;
+            temp = serialArray[position];
+            serialArray[position] = serialArray[position-3];
+            serialArray[position-3] = temp;
+            this.notifyDataSetChanged();
+        }
+        if(new String(serialArray).equals("01234567*"))
+            Toast.makeText(mContext,"You win!", Toast.LENGTH_SHORT).show();
     }
 }
